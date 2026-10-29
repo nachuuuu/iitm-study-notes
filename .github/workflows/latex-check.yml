@@ -1,0 +1,27 @@
+name: Check LaTeX source
+
+on:
+  push:
+    paths:
+      - "subjects/**/*.tex"
+      - ".github/workflows/latex-check.yml"
+  pull_request:
+    paths:
+      - "subjects/**/*.tex"
+      - ".github/workflows/latex-check.yml"
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install LaTeX
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends             texlive-latex-base texlive-latex-recommended texlive-latex-extra             texlive-pictures texlive-science
+      - name: Compile Maths notes
+        run: pdflatex -interaction=nonstopmode -halt-on-error -output-directory=/tmp subjects/maths/maths_notes.tex
+      - name: Compile C notes
+        run: pdflatex -interaction=nonstopmode -halt-on-error -output-directory=/tmp subjects/c-programming/c_programming_notes.tex
+      - name: Compile ESTC notes
+        run: pdflatex -interaction=nonstopmode -halt-on-error -output-directory=/tmp subjects/estc/estc_notes.tex
